@@ -28,19 +28,30 @@
 
 <nav class="glass-effect fixed w-full z-[60] py-4 border-b border-gray-100/50">
     <div class="container mx-auto px-6 flex justify-between items-center">
-        <div class="text-2xl font-black tracking-tighter text-slate-800 flex items-center group cursor-pointer">
-            <div class="w-2 h-8 bg-amber-500 mr-2 group-hover:h-10 transition-all duration-300"></div>
+        <div class="text-lg md:text-2xl font-black tracking-tighter text-slate-800 flex items-center group cursor-pointer">
+            <div class="w-1.5 h-6 md:w-2 md:h-8 bg-amber-500 mr-2 group-hover:h-10 transition-all duration-300"></div>
             COMFORT <span class="text-amber-600 italic ml-1">MEBEL</span>
         </div>
 
-        <div class="hidden lg:flex items-center space-x-10 font-bold text-[12px] uppercase tracking-[0.2em] text-slate-600">
-            <a href="#asosiy" class="hover:text-amber-600 transition-colors">Asosiy</a>
-            <a href="#katalog" class="hover:text-amber-600 transition-colors">Katalog</a>
-            <a href="#xizmatlar" class="hover:text-amber-600 transition-colors">Xizmatlar</a>
-            <a href="#aloqa" class="hover:text-amber-600 transition-colors">Bog'lanish</a>
+        <button onclick="toggleMenu()" class="lg:hidden text-slate-800 focus:outline-none p-2">
+            <i id="menuIcon" class="fas fa-bars text-xl"></i>
+        </button>
+
+        <div id="navMenu" class="hidden absolute top-full left-0 w-full bg-white border-b lg:border-none lg:static lg:bg-transparent lg:flex lg:items-center lg:justify-between lg:w-auto transition-all duration-300">
+            <div class="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-10 p-6 lg:p-0 font-bold text-[12px] uppercase tracking-[0.2em] text-slate-600">
+                <a href="#asosiy" onclick="toggleMenu()" class="hover:text-amber-600 transition-colors w-full text-center lg:w-auto">Asosiy</a>
+                <a href="#katalog" onclick="toggleMenu()" class="hover:text-amber-600 transition-colors w-full text-center lg:w-auto">Katalog</a>
+                <a href="#xizmatlar" onclick="toggleMenu()" class="hover:text-amber-600 transition-colors w-full text-center lg:w-auto">Xizmatlar</a>
+                <a href="#aloqa" onclick="toggleMenu()" class="hover:text-amber-600 transition-colors w-full text-center lg:w-auto">Bog'lanish</a>
+                
+               <button onclick="openModal(); toggleMenu()" class="lg:hidden flex items-center justify-center space-x-2 text-slate-600 hover:text-amber-600 transition-colors w-full text-center">
+                
+                <span class="font-bold text-[12px] uppercase tracking-[0.2em]">Buyurtma berish</span>
+</button>
+            </div>
         </div>
 
-        <div class="flex items-center space-x-4">
+        <div class="hidden lg:block">
             <button onclick="openModal()" class="flex items-center space-x-2 bg-slate-900 text-white px-6 py-3 rounded-full hover:bg-amber-600 transition-all shadow-xl active:scale-95">
                 <i class="fas fa-phone-alt text-[10px]"></i>
                 <span class="text-[10px] font-black uppercase tracking-widest">Buyurtma</span>
@@ -64,7 +75,7 @@
                 <span class="text-amber-500 text-[10px] font-bold uppercase tracking-widest text-white">Premium Collection</span>
             </div>
             <h1 class="text-5xl md:text-7xl font-black mb-8 leading-tight tracking-tight">
-                Sizning <span class="text-amber-500 italic">Comfort</span>ingiz <br> bizning maqsadimiz.
+                Sizning <span class="text-amber-500 italic">Comfort </span>ingiz <br> bizning maqsadimiz.
             </h1>
             <div class="flex flex-wrap gap-4">
                 <a href="#katalog" class="bg-amber-600 hover:bg-amber-700 text-white px-10 py-5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all shadow-xl">Katalog</a>
@@ -93,6 +104,41 @@
     </div>
 </section>
 
+<section id="xizmatlar" class="py-24 bg-slate-50">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <h2 class="text-amber-500 text-[11px] font-black uppercase tracking-[0.4em] mb-4 italic">Bizning xizmatlar</h2>
+            <h3 class="text-4xl md:text-5xl font-black text-slate-900 leading-tight">Siz uchun <span class="text-amber-500">Imkoniyatlar</span></h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-10 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 group" data-aos="fade-up" data-aos-delay="100">
+                <div class="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-amber-500 transition-colors duration-500">
+                    <i class="fas fa-truck text-2xl text-amber-600 group-hover:text-white"></i>
+                </div>
+                <h4 class="text-xl font-black mb-4 text-slate-800">Bepul Yetkazib Berish</h4>
+                <p class="text-gray-500 text-sm leading-relaxed">Shahar ichida barcha buyurtmalarni eshigingizgacha xavfsiz va bepul yetkazib beramiz.</p>
+            </div>
+
+            <div class="bg-white p-10 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 group" data-aos="fade-up" data-aos-delay="200">
+                <div class="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-amber-500 transition-colors duration-500">
+                    <i class="fas fa-tools text-2xl text-amber-600 group-hover:text-white"></i>
+                </div>
+                <h4 class="text-xl font-black mb-4 text-slate-800">Sifatli O'rnatish</h4>
+                <p class="text-gray-500 text-sm leading-relaxed">Bizning mutaxassislar mebellarni professional darajada yig'ib va o'rnatib berishadi.</p>
+            </div>
+
+            <div class="bg-white p-10 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 group" data-aos="fade-up" data-aos-delay="300">
+                <div class="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-amber-500 transition-colors duration-500">
+                    <i class="fas fa-pencil-ruler text-2xl text-amber-600 group-hover:text-white"></i>
+                </div>
+                <h4 class="text-xl font-black mb-4 text-slate-800">Individual Dizayn</h4>
+                <p class="text-gray-500 text-sm leading-relaxed">Sizning xonadoningiz o'lchamlariga mos ravishda maxsus dizayn loyihasini chizamiz.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
 <div id="contactModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300" style="opacity: 0;">
     <div class="bg-white w-full max-w-[420px] rounded-[2.5rem] shadow-2xl relative max-h-[90vh] overflow-y-auto animate-modal">
         <button onclick="closeModal()" class="absolute top-6 right-6 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-amber-500 hover:text-white transition-all"><i class="fas fa-times"></i></button>
@@ -112,6 +158,63 @@
         </div>
     </div>
 </div>
+
+<section id="aloqa" class="py-24 bg-white">
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
+            
+            <div class="bg-slate-50 p-10 md:p-16 rounded-[3rem] flex flex-col justify-between" data-aos="fade-right">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-6 leading-tight">
+                        Biz bilan <br>
+                        <span class="text-amber-500 font-light italic text-3xl md:text-4xl">istalgan vaqtda bog'laning</span>
+                    </h2>
+
+                    <div class="space-y-8 mt-12">
+                        <div class="flex items-center space-x-6 group">
+                            <div class="w-14 h-14 bg-amber-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase tracking-widest font-bold mb-1">Telefon raqam</p>
+                                <a href="tel:+998998055858" class="text-xl font-black text-slate-800 hover:text-amber-600 transition-colors">+998 (77) 359 33 00</a>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-6 group">
+                            <div class="w-14 h-14 bg-amber-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase tracking-widest font-bold mb-1">Bizning manzil</p>
+                                <p class="text-lg font-bold text-slate-800 leading-snug">Xorazm viloyati, Gurlan tumani, K.Haytmetov ko'chasi, 4-uy</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="openModal()" class="mt-16 w-full bg-amber-500 hover:bg-amber-600 text-white font-black py-6 rounded-2xl transition-all shadow-xl shadow-amber-500/30 uppercase tracking-[0.2em] text-xs">
+                    Ariza qoldirish
+                </button>
+            </div>
+
+            <div class="relative min-h-[450px] rounded-[3rem] overflow-hidden shadow-2xl border-8 border-slate-50" data-aos="fade-left">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11942.345678912345!2d60.4856789!3d41.8445678!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x41df0f0000000001%3A0x0!2sGurlan%2C%20Xorazm%20Viloyati%2C%20Uzbekistan!5e0!3m2!1suz!2s!4v1714200000000!5m2!1suz!2s" 
+                    class="absolute inset-0 w-full h-full border-0 grayscale-[0.2] hover:grayscale-0 transition-all duration-700" 
+                    allowfullscreen="" 
+                    loading="lazy">
+                </iframe>
+                
+                <a href="https://www.google.com/maps/dir//Gurlan,+Xorazm+Viloyati,+Uzbekistan" target="_blank" class="absolute bottom-8 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md px-6 py-3 rounded-full shadow-lg text-[10px] font-black uppercase tracking-widest text-slate-800 hover:bg-amber-500 hover:text-white transition-all">
+                   <i class="fas fa-directions mr-2"></i> Yo'nalish olish
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
 
 <footer class="bg-white py-12 text-center border-t border-gray-100">
     <p class="text-gray-400 font-medium">&copy; 2026 COMFORT MEBEL. Barcha huquqlar himoyalangan.</p>
@@ -256,6 +359,21 @@
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
+    function toggleMenu() {
+    const menu = document.getElementById('navMenu');
+    const icon = document.getElementById('menuIcon');
+    
+    // Menyuni ko'rsatish/yashirish
+    if (menu.classList.contains('hidden')) {
+        menu.classList.remove('hidden');
+        icon.classList.replace('fa-bars', 'fa-times'); // "X" belgisiga o'zgartirish
+    } else {
+        menu.classList.add('hidden');
+        icon.classList.replace('fa-times', 'fa-bars'); // Gumbur belgisiga qaytarish
+    }
+}
+
+
     AOS.init({ duration: 800, once: true });
 
     // Slider funksiyalari
