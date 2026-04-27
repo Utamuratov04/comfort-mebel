@@ -29,6 +29,10 @@
                 <i class="fas fa-layer-group text-lg group-hover:text-amber-500"></i>
                 <span class="font-bold">Barcha Mebellar</span>
             </button>
+            <button onclick="showSection('messages')" class="sidebar-item w-full flex items-center space-x-3 py-4 px-5 rounded-2xl hover:bg-slate-700 transition text-slate-300 hover:text-white group">
+                <i class="fas fa-envelope text-lg group-hover:text-amber-500"></i>
+                <span class="font-bold">Xabarlar</span>
+            </button>
             
             <button onclick="logout()" class="sidebar-item w-full flex items-center space-x-3 py-4 px-5 rounded-2xl hover:bg-red-500/10 transition text-red-400 hover:text-red-500 mt-10">
                 <i class="fas fa-sign-out-alt text-lg"></i>
@@ -49,7 +53,7 @@
         <header class="mb-10 flex justify-between items-end">
             <div>
                 <h2 id="sectionTitle" class="text-3xl font-black text-slate-800 tracking-tight">Mebel Qo'shish</h2>
-                <p class="text-slate-500 font-medium mt-1 italic">Yangi mahsulotlarni kategoriyalar bo'yicha boshqaring</p>
+                <p id="sectionSub" class="text-slate-500 font-medium mt-1 italic">Yangi mahsulotlarni kategoriyalar bo'yicha boshqaring</p>
             </div>
             <div class="text-right">
                 <span class="bg-green-500/10 text-green-600 px-4 py-2 rounded-full text-xs font-bold uppercase border border-green-200 shadow-sm">
@@ -113,6 +117,11 @@
             </div>
         </section>
 
+        <section id="messageSection" class="hidden">
+            <div id="messageList" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                </div>
+        </section>
+
     </main>
 
     <script>
@@ -121,7 +130,9 @@
             window.location.href = 'login.html';
         }
 
-        const API_URL = 'https://7da933a18628966e.mokky.dev/mebellar';
+        const BASE_URL = 'https://7da933a18628966e.mokky.dev';
+        const API_URL = `${BASE_URL}/mebellar`;
+        const MSG_URL = `${BASE_URL}/messages`;
         const TOKEN = localStorage.getItem('token');
 
         // 2. TIZIMDAN CHIQISH
@@ -134,15 +145,28 @@
         function showSection(section) {
             document.getElementById('addSection').classList.toggle('hidden', section !== 'add');
             document.getElementById('listSection').classList.toggle('hidden', section !== 'list');
-            document.getElementById('sectionTitle').innerText = section === 'add' ? "Mebel Qo'shish" : "Barcha Mebellar";
+            document.getElementById('messageSection').classList.toggle('hidden', section !== 'messages');
             
-            if(section === 'list') yuklashMebellar();
+            const title = document.getElementById('sectionTitle');
+            const sub = document.getElementById('sectionSub');
+
+            if(section === 'add') {
+                title.innerText = "Mebel Qo'shish";
+                sub.innerText = "Yangi mahsulotlarni kategoriyalar bo'yicha boshqaring";
+            } else if(section === 'list') {
+                title.innerText = "Barcha Mebellar";
+                sub.innerText = "Bazadagi mahsulotlarni tahrirlash yoki o'chirish";
+                yuklashMebellar();
+            } else if(section === 'messages') {
+                title.innerText = "Mijoz Xabarlari";
+                sub.innerText = "Saytdan kelgan so'rovlar va bog'lanish xabarlari";
+                yuklashXabarlar();
+            }
         }
 
         // 4. MAHSULOT QO'SHISH
         document.getElementById('mebelForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const btn = e.target.querySelector('button');
             const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner animate-spin mr-2"></i> SAQLANMOQDA...';
@@ -168,9 +192,6 @@
                 if (res.ok) {
                     alert("✅ Mebel muvaffaqiyatli saqlandi!");
                     document.getElementById('mebelForm').reset();
-                } else if (res.status === 401) {
-                    alert("🛑 Seans muddati tugadi. Iltimos qayta login qiling.");
-                    logout();
                 } else {
                     alert("❌ Xatolik yuz berdi!");
                 }
@@ -182,80 +203,103 @@
             }
         });
 
-        // 5. RO'YXATNI YUKLASH
+        // 5. MEBELLARNI YUKLASH
         async function yuklashMebellar() {
             const body = document.getElementById('adminTableBody');
-            body.innerHTML = '<tr><td colspan="5" class="p-20 text-center"><i class="fas fa-spinner animate-spin text-3xl text-amber-500 mb-4"></i><p class="text-slate-400 font-bold italic">Ma\'lumotlar yuklanmoqda...</p></td></tr>';
+            body.innerHTML = '<tr><td colspan="5" class="p-20 text-center"><i class="fas fa-spinner animate-spin text-3xl text-amber-500 mb-4"></i></td></tr>';
 
             try {
                 const res = await fetch(API_URL);
                 const mebellar = await res.json();
                 body.innerHTML = '';
 
-                if(mebellar.length === 0) {
-                    body.innerHTML = '<tr><td colspan="5" class="p-20 text-center text-slate-400 font-bold uppercase tracking-widest">Hozircha baza bo\'sh.</td></tr>';
-                    return;
-                }
-
                 mebellar.forEach((mebel) => {
-                    // Kategoriyalarni chiroyli badge shaklida ko'rsatish
                     const badges = {
-                        top: '<span class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase bg-amber-50 text-amber-600 border border-amber-100">Asosiy</span>',
-                        oshxona: '<span class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase bg-green-50 text-green-600 border border-green-100">Oshxona</span>',
-                        yotoqxona: '<span class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase bg-blue-50 text-blue-600 border border-blue-100">Yotoqxona</span>',
-                        mehmonxona: '<span class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase bg-purple-50 text-purple-600 border border-purple-100">Mehmonxona</span>',
-                        katalog: '<span class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase bg-slate-100 text-slate-600 border border-slate-200">Katalog</span>'
+                        top: 'bg-amber-50 text-amber-600',
+                        oshxona: 'bg-green-50 text-green-600',
+                        yotoqxona: 'bg-blue-50 text-blue-600',
+                        mehmonxona: 'bg-purple-50 text-purple-600',
+                        katalog: 'bg-slate-100 text-slate-600'
                     };
 
                     body.innerHTML += `
-                        <tr class="hover:bg-slate-50/50 transition-all duration-300 group">
+                        <tr class="hover:bg-slate-50 transition-all group">
                             <td class="p-8 flex justify-center">
-                                <img src="${mebel.rasm}" class="w-20 h-20 rounded-2xl object-cover shadow-lg border-2 border-white group-hover:scale-110 transition duration-500" onerror="this.src='https://via.placeholder.com/100?text=Rasm+Xato'">
+                                <img src="${mebel.rasm}" class="w-20 h-20 rounded-2xl object-cover shadow-lg">
                             </td>
                             <td class="p-8">
-                                <div class="flex flex-col">
-                                    <span class="text-slate-800 font-black text-lg tracking-tight">${mebel.nomi}</span>
-                                    <span class="text-slate-400 text-xs font-bold uppercase tracking-tighter mt-1 italic">ID: #${mebel.id}</span>
-                                </div>
+                                <span class="text-slate-800 font-black text-lg">${mebel.nomi}</span>
                             </td>
                             <td class="p-8 text-center">
-                                ${badges[mebel.category] || badges['katalog']}
+                                <span class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase ${badges[mebel.category] || badges['katalog']}">${mebel.category}</span>
                             </td>
                             <td class="p-8">
-                                <span class="text-slate-800 font-black text-md bg-slate-50 px-3 py-2 rounded-xl border border-slate-100 italic">
-                                    ${mebel.narxi} UZS
-                                </span>
+                                <span class="font-black text-slate-700">${mebel.narxi} UZS</span>
                             </td>
                             <td class="p-8 text-center">
-                                <button onclick="ochirish(${mebel.id})" class="bg-red-50 text-red-500 w-12 h-12 rounded-2xl hover:bg-red-500 hover:text-white transition-all duration-300 shadow-sm border border-red-100 group-hover:shadow-red-500/20">
-                                    <i class="fas fa-trash-alt"></i>
+                                <button onclick="ochirish(${mebel.id})" class="text-red-400 hover:text-red-600 transition-all">
+                                    <i class="fas fa-trash-alt text-xl"></i>
                                 </button>
                             </td>
                         </tr>
                     `;
                 });
             } catch (err) {
-                body.innerHTML = '<tr><td colspan="5" class="p-20 text-center text-red-500 font-black uppercase italic">⚠️ Bazaga ulanishda xatolik!</td></tr>';
+                body.innerHTML = '<tr><td colspan="5" class="text-center p-10 text-red-500">Xatolik yuz berdi.</td></tr>';
             }
         }
 
-        // 6. O'CHIRISH
-        async function ochirish(id) {
-            if(confirm("❗ Haqiqatan ham ushbu mahsulotni o'chirmoqchimisiz? Ma'lumotni qayta tiklab bo'lmaydi.")) {
-                try {
-                    const res = await fetch(`${API_URL}/${id}`, { 
-                        method: 'DELETE',
-                        headers: { 'Authorization': `Bearer ${TOKEN}` }
-                    });
-                    
-                    if(res.ok) {
-                        yuklashMebellar();
-                    } else {
-                        alert("🛑 Ruxsat yo'q yoki baza bilan aloqa uzildi.");
-                    }
-                } catch (err) {
-                    alert("❌ O'chirishda xatolik yuz berdi.");
+        // 6. XABARLARNI YUKLASH (YANGI)
+        async function yuklashXabarlar() {
+            const list = document.getElementById('messageList');
+            list.innerHTML = '<div class="col-span-full text-center py-20"><i class="fas fa-spinner animate-spin text-3xl text-amber-500"></i></div>';
+
+            try {
+                const res = await fetch(MSG_URL);
+                const data = await res.json();
+                list.innerHTML = '';
+
+                if(data.length === 0) {
+                    list.innerHTML = '<p class="col-span-full text-center text-slate-400 font-bold py-20 uppercase tracking-widest italic">Xabarlar mavjud emas.</p>';
+                    return;
                 }
+
+                data.reverse().forEach(msg => {
+                    list.innerHTML += `
+                        <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-white hover:shadow-xl transition-all relative group">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h4 class="text-xl font-black text-slate-800">${msg.name}</h4>
+                                    <p class="text-amber-600 font-bold text-sm"><i class="fas fa-phone-alt mr-2"></i>${msg.phone}</p>
+                                </div>
+                                <span class="text-[10px] font-black text-slate-400 uppercase bg-slate-50 px-3 py-1 rounded-full">${msg.date || 'Yaqinda'}</span>
+                            </div>
+                            <div class="bg-slate-50 p-5 rounded-2xl text-slate-600 text-sm italic leading-relaxed">
+                                "${msg.message || 'Xabar matni yo\'q'}"
+                            </div>
+                            <button onclick="ochirishXabar(${msg.id})" class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 text-red-300 hover:text-red-500 transition-all">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                list.innerHTML = '<p class="col-span-full text-center text-red-500 font-black">XABARLARNI YUKLASHDA XATOLIK!</p>';
+            }
+        }
+
+        // 7. O'CHIRISH FUNKSIYALARI
+        async function ochirish(id) {
+            if(confirm("Mahsulotni o'chirmoqchimisiz?")) {
+                await fetch(`${API_URL}/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${TOKEN}` } });
+                yuklashMebellar();
+            }
+        }
+
+        async function ochirishXabar(id) {
+            if(confirm("Ushbu xabarni o'chirmoqchimisiz?")) {
+                await fetch(`${MSG_URL}/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${TOKEN}` } });
+                yuklashXabarlar();
             }
         }
 
