@@ -26,42 +26,54 @@
 </head>
 <body class="bg-slate-50 overflow-x-hidden text-slate-900">
 
-    <nav class="glass-effect fixed w-full z-[60] py-4 border-b border-gray-100/50">
-    <div class="container mx-auto px-6 flex justify-between items-center">
-        <div class="text-lg md:text-2xl font-black tracking-tighter text-slate-800 flex items-center group cursor-pointer">
+  
+
+
+<nav class="glass-effect fixed w-full z-[60] py-3 md:py-4 border-b border-gray-100/50 bg-white/80 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center h-12 md:h-16">
+        
+        <div class="flex-shrink-0 text-lg md:text-2xl font-black tracking-tighter text-slate-800 flex items-center group cursor-pointer select-none">
             <div class="w-1.5 h-6 md:w-2 md:h-8 bg-amber-500 mr-2 group-hover:h-10 transition-all duration-300"></div>
             COMFORT <span class="text-amber-600 italic ml-1">MEBEL</span>
         </div>
 
-        <button onclick="toggleMenu()" class="lg:hidden text-slate-800 focus:outline-none p-2">
-            <i id="menuIcon" class="fas fa-bars text-xl"></i>
-        </button>
-
-        <div id="navMenu" class="hidden absolute top-full left-0 w-full bg-white border-b lg:border-none lg:static lg:bg-transparent lg:flex lg:items-center lg:justify-between lg:w-auto transition-all duration-300">
-            <div class="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-10 p-6 lg:p-0 font-bold text-[12px] uppercase tracking-[0.2em] text-slate-600">
-                <a href="#asosiy" onclick="toggleMenu()" class="hover:text-amber-600 transition-colors w-full text-center lg:w-auto">Asosiy</a>
-                <a href="#katalog" onclick="toggleMenu()" class="hover:text-amber-600 transition-colors w-full text-center lg:w-auto">Katalog</a>
-                <a href="#xizmatlar" onclick="toggleMenu()" class="hover:text-amber-600 transition-colors w-full text-center lg:w-auto">Xizmatlar</a>
-                <a href="#aloqa" onclick="toggleMenu()" class="hover:text-amber-600 transition-colors w-full text-center lg:w-auto">Bog'lanish</a>
-                
-               <button onclick="openModal(); toggleMenu()" class="lg:hidden flex items-center justify-center space-x-2 text-slate-600 hover:text-amber-600 transition-colors w-full text-center">
-                
-                <span class="font-bold text-[12px] uppercase tracking-[0.2em]">Buyurtma berish</span>
-                </button>
-            </div>
+        <div class="hidden lg:flex items-center space-x-8 font-bold text-[11px] uppercase tracking-[0.2em] text-slate-600">
+            <a href="#asosiy" class="hover:text-amber-600 transition-colors">Asosiy</a>
+            <a href="#katalog" class="hover:text-amber-600 transition-colors">Katalog</a>
+            <a href="#xizmatlar" class="hover:text-amber-600 transition-colors">Xizmatlar</a>
+            <a href="#aloqa" class="hover:text-amber-600 transition-colors">Bog'lanish</a>
         </div>
 
-        <div class="hidden lg:flex items-center space-x-4">
-            <a href="login.html" class="text-slate-400 hover:text-amber-500 hover:scale-110 transition-all duration-300 p-2 rounded-full hover:bg-slate-100 flex items-center justify-center" title="Admin panelga kirish">
-                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div class="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
+            
+            <a href="login.html" class="text-slate-500 hover:text-amber-500 hover:scale-110 transition-all duration-300 p-2 rounded-full hover:bg-slate-100 flex items-center justify-center" title="Admin panelga kirish">
+                <svg class="w-6 h-6 md:w-7 md:h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>
                 </svg>
             </a>
 
-            <button onclick="openModal()" class="flex items-center space-x-2 bg-slate-900 text-white px-6 py-3 rounded-full hover:bg-amber-600 transition-all shadow-xl active:scale-95">
+            <button onclick="openModal()" class="hidden lg:flex items-center space-x-2 bg-slate-900 text-white px-6 py-3 rounded-full hover:bg-amber-600 transition-all shadow-xl active:scale-95">
                 <i class="fas fa-phone-alt text-[10px]"></i>
                 <span class="text-[10px] font-black uppercase tracking-widest">Buyurtma</span>
+            </button>
+
+            <button onclick="toggleMenu()" class="lg:hidden text-slate-800 focus:outline-none p-2 hover:bg-slate-50 rounded-full transition-colors flex items-center justify-center">
+                <i id="menuIcon" class="fas fa-bars text-xl"></i>
+            </button>
+            
+        </div>
+    </div>
+
+    <div id="navMenu" class="hidden absolute top-full left-0 w-full bg-white border-b border-slate-100 shadow-lg lg:hidden transition-all duration-300">
+        <div class="flex flex-col items-center space-y-4 p-6 font-bold text-[12px] uppercase tracking-[0.2em] text-slate-600">
+            <a href="#asosiy" onclick="toggleMenu()" class="hover:text-amber-600 transition-colors w-full text-center py-2">Asosiy</a>
+            <a href="#katalog" onclick="toggleMenu()" class="hover:text-amber-600 transition-colors w-full text-center py-2">Katalog</a>
+            <a href="#xizmatlar" onclick="toggleMenu()" class="hover:text-amber-600 transition-colors w-full text-center py-2">Xizmatlar</a>
+            <a href="#aloqa" onclick="toggleMenu()" class="hover:text-amber-600 transition-colors w-full text-center py-2">Bog'lanish</a>
+            
+            <button onclick="openModal(); toggleMenu()" class="w-full text-center py-3 bg-amber-500 text-white rounded-xl font-bold text-[11px] uppercase tracking-[0.2em] shadow-md hover:bg-amber-600 transition-all active:scale-95">
+                Buyurtma berish
             </button>
         </div>
     </div>
