@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Comfort Mebel | Login</title>
+    
+    <script>
+        const token = sessionStorage.getItem('token');
+        if (token && token !== "undefined" && token !== "null" && token.length > 10) {
+            window.location.replace('admin.html');
+        }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="bg-slate-100 h-screen flex items-center justify-center">
     <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl w-96 border border-slate-100">
@@ -11,15 +20,22 @@
         <form id="loginForm" class="space-y-5">
             <input type="email" id="email" placeholder="Email" class="w-full p-5 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-amber-500 transition font-semibold" required>
             <input type="password" id="password" placeholder="Parol" class="w-full p-5 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-amber-500 transition font-semibold" required>
-            <button type="submit" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black hover:bg-amber-600 transition shadow-lg uppercase tracking-widest text-sm">Kirish</button>
+            <button id="loginBtn" type="submit" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black hover:bg-amber-600 transition shadow-lg uppercase tracking-widest text-sm">Kirish</button>
         </form>
     </div>
 
     <script>
+        // Avvalgi eski localStorage tokenini butunlay tozalab tashlaymiz
+        localStorage.removeItem('token');
+
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const btn = document.getElementById('loginBtn');
+            
+            btn.innerHTML = '<i class="fas fa-spinner animate-spin mr-2"></i> Kirilmoqda...';
+            btn.disabled = true;
 
             try {
                 const res = await fetch('https://7da933a18628966e.mokky.dev/auth', {
@@ -31,14 +47,17 @@
                 const data = await res.json();
 
                 if (res.ok) {
-                    // Muvaffaqiyatli kirilsa, tokenni saqlaymiz
-                    localStorage.setItem('token', data.token);
-                    window.location.href = 'admin.html';
+                    // DIQQAT: Tokenni sessionStorage-ga saqlaymiz!
+                    sessionStorage.setItem('token', data.token);
+                    window.location.replace('admin.html');
                 } else {
                     alert("Email yoki parol xato!");
                 }
             } catch (err) {
                 alert("Server bilan aloqa uzildi!");
+            } finally {
+                btn.innerHTML = 'Kirish';
+                btn.disabled = false;
             }
         });
     </script>

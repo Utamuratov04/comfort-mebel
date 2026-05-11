@@ -1138,8 +1138,361 @@ const feedbackForm = document.getElementById('feedbackForm');
         mebellarniYuklash('top', 'top-mebellar-list');
     }
 
+<!-- admin eski  -->
+<!-- <!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comfort Mebel | Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .sidebar-item:hover i { transform: scale(1.2); transition: 0.3s; }
+        select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1.25rem center; background-size: 1rem; }
+    </style>
+</head>
+<body class="bg-[#f1f5f9] flex min-h-screen">
 
+    <aside class="w-72 bg-[#1e293b] text-white flex flex-col fixed h-full shadow-2xl">
+        <div class="p-8 border-b border-slate-700">
+            <h1 class="text-2xl font-black text-amber-500 italic tracking-tighter">COMFORT <span class="text-white">ADMIN</span></h1>
+        </div>
+        
+        <nav class="flex-1 p-6 space-y-3">
+            <button onclick="showSection('add')" class="sidebar-item w-full flex items-center space-x-3 py-4 px-5 rounded-2xl hover:bg-slate-700 transition text-slate-300 hover:text-white group">
+                <i class="fas fa-plus-circle text-lg group-hover:text-amber-500"></i>
+                <span class="font-bold">Mebel Qo'shish</span>
+            </button>
+            <button onclick="showSection('list')" class="sidebar-item w-full flex items-center space-x-3 py-4 px-5 rounded-2xl hover:bg-slate-700 transition text-slate-300 hover:text-white group">
+                <i class="fas fa-layer-group text-lg group-hover:text-amber-500"></i>
+                <span class="font-bold">Barcha Mebellar</span>
+            </button>
+            <button onclick="showSection('messages')" class="sidebar-item w-full flex items-center space-x-3 py-4 px-5 rounded-2xl hover:bg-slate-700 transition text-slate-300 hover:text-white group">
+                <i class="fas fa-envelope text-lg group-hover:text-amber-500"></i>
+                <span class="font-bold">Xabarlar</span>
+            </button>
+            
+            <button onclick="logout()" class="sidebar-item w-full flex items-center space-x-3 py-4 px-5 rounded-2xl hover:bg-red-500/10 transition text-red-400 hover:text-red-500 mt-10">
+                <i class="fas fa-sign-out-alt text-lg"></i>
+                <span class="font-bold">Tizimdan Chiqish</span>
+            </button>
+        </nav>
 
+        <div class="p-8 border-t border-slate-700">
+            <a href="index.html" class="flex items-center space-x-3 text-slate-400 hover:text-amber-500 transition">
+                <i class="fas fa-arrow-left"></i>
+                <span class="text-sm font-semibold">Asosiy saytga qaytish</span>
+            </a>
+        </div>
+    </aside>
 
+    <main class="flex-1 ml-72 p-12">
+        
+        <header class="mb-10 flex justify-between items-end">
+            <div>
+                <h2 id="sectionTitle" class="text-3xl font-black text-slate-800 tracking-tight">Mebel Qo'shish</h2>
+                <p id="sectionSub" class="text-slate-500 font-medium mt-1 italic">Yangi mahsulotlarni kategoriyalar bo'yicha boshqaring</p>
+            </div>
+            <div class="text-right">
+                <span class="bg-green-500/10 text-green-600 px-4 py-2 rounded-full text-xs font-bold uppercase border border-green-200 shadow-sm">
+                    <i class="fas fa-circle text-[8px] mr-2 animate-pulse"></i>Online Baza
+                </span>
+            </div>
+        </header>
 
+        <section id="addSection" class="max-w-4xl">
+            <div class="bg-white p-10 rounded-[2.5rem] shadow-xl shadow-slate-200/60 border border-white">
+                <form id="mebelForm" class="space-y-8">
+                    <div class="grid grid-cols-2 gap-8">
+                        <div class="space-y-3">
+                            <label class="text-[10px] font-black text-slate-400 uppercase ml-1 tracking-widest">Mebel nomi</label>
+                            <input type="text" id="mebelNomi" placeholder="Masalan: Royal Divan" class="w-full p-5 bg-slate-50 border-2 border-transparent focus:border-amber-500/20 rounded-2xl focus:ring-4 focus:ring-amber-500/5 outline-none transition font-bold text-slate-700" required>
+                        </div>
+                        <div class="space-y-3">
+                            <label class="text-[10px] font-black text-slate-400 uppercase ml-1 tracking-widest">Narxi (UZS)</label>
+                            <input type="text" id="mebelNarxi" placeholder="Masalan: 5 000 000" class="w-full p-5 bg-slate-50 border-2 border-transparent focus:border-amber-500/20 rounded-2xl focus:ring-4 focus:ring-amber-500/5 outline-none transition font-bold text-slate-700" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-8">
+                        <div class="space-y-3">
+                            <label class="text-[10px] font-black text-slate-400 uppercase ml-1 tracking-widest">Rasm havolasi (URL)</label>
+                            <input type="text" id="mebelRasm" placeholder="https://rasm-manzili.jpg" class="w-full p-5 bg-slate-50 border-2 border-transparent focus:border-amber-500/20 rounded-2xl focus:ring-4 focus:ring-amber-500/5 outline-none transition font-bold text-slate-700" required>
+                        </div>
+                        <div class="space-y-3">
+                            <label class="text-[10px] font-black text-slate-400 uppercase ml-1 tracking-widest">Qayerda ko'rinsin?</label>
+                            <select id="mebelCategory" class="w-full p-5 bg-slate-50 border-2 border-transparent focus:border-amber-500/20 rounded-2xl focus:ring-4 focus:ring-amber-500/5 outline-none transition font-bold text-slate-700 cursor-pointer">
+                                <option value="top">Asosiy sahifa (Top mahsulotlar)</option>
+                                <option value="oshxona">Oshxona mebellari</option>
+                                <option value="yotoqxona">Yotoqxona mebellari</option>
+                                <option value="mehmonxona">Mehmonxona mebellari</option>
+                                <option value="katalog">Umumiy Katalog (Xizmatlar)</option>
+                            </select>
+                        </div>
+                    </div>
 
+                    <button type="submit" class="w-full bg-[#1e293b] text-white py-6 rounded-[1.5rem] font-black text-sm uppercase tracking-[0.25em] hover:bg-amber-500 transition-all duration-300 shadow-xl hover:shadow-amber-500/20 transform hover:-translate-y-1">
+                        <i class="fas fa-cloud-upload-alt mr-2"></i> SAQLASH VA BAZAGA YUBORISH
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <section id="listSection" class="hidden">
+            <div class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/60 border border-white overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-slate-50 border-b border-slate-100">
+                        <tr>
+                            <th class="p-8 text-xs font-black text-slate-400 uppercase tracking-widest text-center w-32">Rasm</th>
+                            <th class="p-8 text-xs font-black text-slate-400 uppercase tracking-widest">Mebel Nomi</th>
+                            <th class="p-8 text-xs font-black text-slate-400 uppercase tracking-widest text-center">Bo'lim</th>
+                            <th class="p-8 text-xs font-black text-slate-400 uppercase tracking-widest">Narxi</th>
+                            <th class="p-8 text-xs font-black text-slate-400 uppercase tracking-widest text-center">Harakat</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableBody" class="divide-y divide-slate-100"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="messageSection" class="hidden">
+            <div id="messageList" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                </div>
+        </section>
+
+    </main>
+
+    <script>
+        // 1. XAVFSIZLIK
+        if (!localStorage.getItem('token')) {
+            window.location.href = 'login.html';
+        }
+
+        const BASE_URL = 'https://7da933a18628966e.mokky.dev';
+        const API_URL = `${BASE_URL}/mebellar`;
+        const MSG_URL = `${BASE_URL}/messages`;
+        const TOKEN = localStorage.getItem('token');
+
+        // 2. TIZIMDAN CHIQISH
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+        }
+
+        // 3. BO'LIMLARNI BOSHQARISH
+        function showSection(section) {
+            document.getElementById('addSection').classList.toggle('hidden', section !== 'add');
+            document.getElementById('listSection').classList.toggle('hidden', section !== 'list');
+            document.getElementById('messageSection').classList.toggle('hidden', section !== 'messages');
+            
+            const title = document.getElementById('sectionTitle');
+            const sub = document.getElementById('sectionSub');
+
+            if(section === 'add') {
+                title.innerText = "Mebel Qo'shish";
+                sub.innerText = "Yangi mahsulotlarni kategoriyalar bo'yicha boshqaring";
+            } else if(section === 'list') {
+                title.innerText = "Barcha Mebellar";
+                sub.innerText = "Bazadagi mahsulotlarni tahrirlash yoki o'chirish";
+                yuklashMebellar();
+            } else if(section === 'messages') {
+                title.innerText = "Mijoz Xabarlari";
+                sub.innerText = "Saytdan kelgan so'rovlar va bog'lanish xabarlari";
+                yuklashXabarlar();
+            }
+        }
+
+        // 4. MAHSULOT QO'SHISH
+        document.getElementById('mebelForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner animate-spin mr-2"></i> SAQLANMOQDA...';
+            btn.disabled = true;
+
+            const data = {
+                nomi: document.getElementById('mebelNomi').value,
+                narxi: document.getElementById('mebelNarxi').value,
+                rasm: document.getElementById('mebelRasm').value,
+                category: document.getElementById('mebelCategory').value 
+            };
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${TOKEN}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (res.ok) {
+                    alert("✅ Mebel muvaffaqiyatli saqlandi!");
+                    document.getElementById('mebelForm').reset();
+                } else {
+                    alert("❌ Xatolik yuz berdi!");
+                }
+            } catch (err) {
+                alert("📡 Server bilan aloqa uzildi.");
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // 5. MEBELLARNI YUKLASH
+        async function yuklashMebellar() {
+            const body = document.getElementById('adminTableBody');
+            body.innerHTML = '<tr><td colspan="5" class="p-20 text-center"><i class="fas fa-spinner animate-spin text-3xl text-amber-500 mb-4"></i></td></tr>';
+
+            try {
+                const res = await fetch(API_URL);
+                const mebellar = await res.json();
+                body.innerHTML = '';
+
+                mebellar.forEach((mebel) => {
+                    const badges = {
+                        top: 'bg-amber-50 text-amber-600',
+                        oshxona: 'bg-green-50 text-green-600',
+                        yotoqxona: 'bg-blue-50 text-blue-600',
+                        mehmonxona: 'bg-purple-50 text-purple-600',
+                        katalog: 'bg-slate-100 text-slate-600'
+                    };
+
+                    body.innerHTML += `
+                        <tr class="hover:bg-slate-50 transition-all group">
+                            <td class="p-8 flex justify-center">
+                                <img src="${mebel.rasm}" class="w-20 h-20 rounded-2xl object-cover shadow-lg">
+                            </td>
+                            <td class="p-8">
+                                <span class="text-slate-800 font-black text-lg">${mebel.nomi}</span>
+                            </td>
+                            <td class="p-8 text-center">
+                                <span class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase ${badges[mebel.category] || badges['katalog']}">${mebel.category}</span>
+                            </td>
+                            <td class="p-8">
+                                <span class="font-black text-slate-700">${mebel.narxi} UZS</span>
+                            </td>
+                            <td class="p-8 text-center">
+                                <button onclick="ochirish(${mebel.id})" class="text-red-400 hover:text-red-600 transition-all">
+                                    <i class="fas fa-trash-alt text-xl"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                body.innerHTML = '<tr><td colspan="5" class="text-center p-10 text-red-500">Xatolik yuz berdi.</td></tr>';
+            }
+        }
+
+        // 6. XABARLARNI YUKLASH (YANGI)
+        async function yuklashXabarlar() {
+            const list = document.getElementById('messageList');
+            list.innerHTML = '<div class="col-span-full text-center py-20"><i class="fas fa-spinner animate-spin text-3xl text-amber-500"></i></div>';
+
+            try {
+                const res = await fetch(MSG_URL);
+                const data = await res.json();
+                list.innerHTML = '';
+
+                if(data.length === 0) {
+                    list.innerHTML = '<p class="col-span-full text-center text-slate-400 font-bold py-20 uppercase tracking-widest italic">Xabarlar mavjud emas.</p>';
+                    return;
+                }
+
+                data.reverse().forEach(msg => {
+                    list.innerHTML += `
+                        <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-white hover:shadow-xl transition-all relative group">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h4 class="text-xl font-black text-slate-800">${msg.name}</h4>
+                                    <p class="text-amber-600 font-bold text-sm"><i class="fas fa-phone-alt mr-2"></i>${msg.phone}</p>
+                                </div>
+                                <span class="text-[10px] font-black text-slate-400 uppercase bg-slate-50 px-3 py-1 rounded-full">${msg.date || 'Yaqinda'}</span>
+                            </div>
+                            <div class="bg-slate-50 p-5 rounded-2xl text-slate-600 text-sm italic leading-relaxed">
+                                "${msg.message || 'Xabar matni yo\'q'}"
+                            </div>
+                            <button onclick="ochirishXabar(${msg.id})" class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 text-red-300 hover:text-red-500 transition-all">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                list.innerHTML = '<p class="col-span-full text-center text-red-500 font-black">XABARLARNI YUKLASHDA XATOLIK!</p>';
+            }
+        }
+
+        // 7. O'CHIRISH FUNKSIYALARI
+        async function ochirish(id) {
+            if(confirm("Mahsulotni o'chirmoqchimisiz?")) {
+                await fetch(`${API_URL}/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${TOKEN}` } });
+                yuklashMebellar();
+            }
+        }
+
+        async function ochirishXabar(id) {
+            if(confirm("Ushbu xabarni o'chirmoqchimisiz?")) {
+                await fetch(`${MSG_URL}/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${TOKEN}` } });
+                yuklashXabarlar();
+            }
+        }
+
+        showSection('add');
+    </script>
+</body>
+</html> -->
+<!-- login eski -->
+<!-- 
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Comfort Mebel | Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 h-screen flex items-center justify-center">
+    <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl w-96 border border-slate-100">
+        <h2 class="text-3xl font-black text-slate-800 mb-8 text-center uppercase tracking-tighter">Admin Kirish</h2>
+        <form id="loginForm" class="space-y-5">
+            <input type="email" id="email" placeholder="Email" class="w-full p-5 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-amber-500 transition font-semibold" required>
+            <input type="password" id="password" placeholder="Parol" class="w-full p-5 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-amber-500 transition font-semibold" required>
+            <button type="submit" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black hover:bg-amber-600 transition shadow-lg uppercase tracking-widest text-sm">Kirish</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const res = await fetch('https://7da933a18628966e.mokky.dev/auth', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    // Muvaffaqiyatli kirilsa, tokenni saqlaymiz
+                    localStorage.setItem('token', data.token);
+                    window.location.href = 'admin.html';
+                } else {
+                    alert("Email yoki parol xato!");
+                }
+            } catch (err) {
+                alert("Server bilan aloqa uzildi!");
+            }
+        });
+    </script>
+</body>
+</html> -->
