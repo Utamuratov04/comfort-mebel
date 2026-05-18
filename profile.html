@@ -45,46 +45,164 @@
             </div>
         </div>
     </div>
+    <div id="mebelModal" class="fixed inset-0 bg-slate-800/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden opacity-0 transition-all duration-300">
+    <div class="bg-white rounded-[2.5rem] max-h-[calc(100vh-2rem)] max-w-md w-full overflow-hidden shadow-2xl border border-gray-100 transform scale-95 transition-all duration-300" id="modalCard">
+        <div class="relative aspect-[4/3] bg-slate-100">
+            <img id="modalMebelRasm" src="" alt="" class="w-full h-full object-cover">
+            <button onclick="closeMebelModal()" class="absolute top-4 right-4 bg-white/80 backdrop-blur-md text-slate-800 w-10 h-10 rounded-full flex items-center justify-center hover:bg-white transition-all shadow-md">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="p-8">
+            <span class="block text-[10px] uppercase font-black text-amber-500 tracking-widest mb-2">Buyurtma qilingan mahsulot</span>
+            <h3 id="modalMebelNomi" class="text-2xl font-black text-slate-800 mb-4 uppercase tracking-wide"></h3>
+            
+            <div class="space-y-4 border-t border-slate-100 pt-4">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-bold text-slate-400 uppercase">Narxi:</span>
+                    <span id="modalMebelNarxi" class="text-xl font-black text-orange-600"></span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-bold text-slate-400 uppercase">Buyurtma sanasi:</span>
+                    <span id="modalMebelSanasi" class="text-sm font-semibold text-slate-600"></span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-bold text-slate-400 uppercase">Sizning izohingiz:</span>
+                    <p id="modalMebelIzohi" class="text-sm font-medium text-slate-500 italic max-w-[200px] text-right truncate-2-lines"></p>
+                </div>
+            </div>
 
-    <script>
-        function buyurtmalarniYuklash() {
-            const phone = document.getElementById('user-phone').value.trim();
-            if(!phone) {
-                alert("Iltimos, telefon raqamni kiriting!");
-                return;
-            }
-
-            fetch(`/api/my-orders/${encodeURIComponent(phone)}`)
-                .then(res => res.json())
-                .then(orders => {
-                    const tbody = document.getElementById('orders-table-body');
-                    tbody.innerHTML = '';
-
-                    if(orders.length === 0) {
-                        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500">Bu raqamga bog'liq buyurtma topilmadi.</td></tr>`;
-                        return;
-                    }
-
-                    orders.forEach(order => {
-                        // Status rangini belgilash
-                        let statusColor = "bg-yellow-100 text-yellow-800";
-                        if(order.status === "Yetkazilmoqda") statusColor = "bg-blue-100 text-blue-800";
-                        if(order.status === "Tugallandi") statusColor = "bg-green-100 text-green-800";
-
-                        tbody.innerHTML += `
-                            <tr class="hover:bg-gray-50">
-                                <td class="p-3 border">${order.sana}</td>
-                                <td class="p-3 border font-semibold">${order.mebelNomi}</td>
-                                <td class="p-3 border text-orange-600 font-bold">${order.narxi} UZS</td>
-                                <td class="p-3 border">
-                                    <span class="px-2 py-1 rounded text-xs font-semibold ${statusColor}">${order.status}</span>
-                                </td>
-                            </tr>
-                        `;
-                    });
-                })
-                .catch(err => console.error("Xatolik:", err));
+            <button onclick="closeMebelModal()" class="w-full mt-6 bg-slate-900 hover:bg-amber-500 text-white py-4 rounded-2xl font-bold text-sm transition-all active:scale-95 shadow-lg shadow-slate-900/10">
+                Yopish
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+    function buyurtmalarniYuklash() {
+        let phone = document.getElementById('user-phone').value.trim();
+        const tbody = document.getElementById('orders-table-body');
+        
+        if(!phone) {
+            alert("Iltimos, telefon raqamni kiriting!");
+            return;
         }
-    </script>
+
+        // Qidirilayotgan raqamni faqat raqamlardan iborat qilib tozalaymiz (masalan: 998773593300)
+        const cleanSearch = phone.replace(/[^0-9]/g, '');
+
+        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-500">Yuklanmoqda...</td></tr>`;
+
+        // To'g'ridan-to'g'ri Mokky.dev dan hamma buyurtmalarni tortamiz
+        fetch(`https://7da933a18628966e.mokky.dev/messages`)
+            .then(res => res.json())
+            .then(allOrders => {
+                tbody.innerHTML = '';
+
+                // Kelgan barcha buyurtmalarni ichidan telefon raqamni har xil nomlar bilan qidiramiz
+                const myOrders = allOrders.filter(order => {
+                    // Bazada tel, phone yoki telefon deb yozilgan bo'lishi mumkin, hammasini tekshiramiz
+                    const orderPhone = (order.tel || order.phone || order.telefon || order.phone_number || '').toString();
+                    // Bazadagi raqamni ham faqat raqamlarga o'giramiz
+                    const cleanOrderPhone = orderPhone.replace(/[^0-9]/g, '');
+                    
+                    // Agar bazadagi raqam biz yozgan raqam bilan mos kelsa yoki ichida bo'lsa
+                    return cleanOrderPhone.includes(cleanSearch) && cleanSearch !== '';
+                });
+
+                if(myOrders.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500">Bu raqamga (${phone}) bog'liq buyurtma topilmadi.</td></tr>`;
+                    return;
+                }
+
+                // Topilgan buyurtmalarni jadvalga chiqarish
+              // Topilgan buyurtmalarni jadvalga chiqarish
+// Topilgan buyurtmalarni jadvalga chiqarish
+// Topilgan buyurtmalarni jadvalga chiqarish
+myOrders.forEach(item => {
+    let joriyStatus = item.status || item.holat || "Kutilmoqda";
+    let statusColor = "bg-yellow-100 text-yellow-800";
+    if(joriyStatus === "Yetkazilmoqda" || joriyStatus === "Dostavka" || joriyStatus === "In progress") statusColor = "bg-blue-100 text-blue-800";
+    if(joriyStatus === "Tugallandi" || joriyStatus === "Yetkazildi" || joriyStatus === "Completed" || joriyStatus === "Tugallangan") statusColor = "bg-green-100 text-green-800";
+
+    let nomi = item.mebelNomi || item.nomi || item.title || "Mebel";
+    let narxi = item.narxi || item.price || "Kelishilgan";
+    if (narxi !== "Kelishilgan" && !narxi.toString().includes("UZS")) {
+        narxi = narxi + " UZS";
+    }
+
+    let rasmUrl = item.rasmi || item.rasm || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=200';
+    let sanaQiymati = item.date || item.sana || "Yaqinda";
+    
+    // Izohni JavaScript xatolik bermasligi uchun tozalaymiz
+    let izoh = item.message ? item.message.replace(/'/g, "\\'") : "Izoh qoldirilmagan";
+
+    // OBYEKT SIFATIDA FUNKSIYAGA UZATISH UCHUN TAYYORLAYMIZ
+    const dataObj = JSON.stringify({ nomi, narxi, rasmUrl, sanaQiymati, izoh }).replace(/"/g, '&quot;');
+
+    // JADVAL SATRI: Ustiga bossa modal ochiladigan qilindi (cursor-pointer qo'shildi)
+    tbody.innerHTML += `
+        <tr onclick="openMebelModal('${dataObj}')" class="hover:bg-amber-50/40 cursor-pointer transition-colors group">
+            <td class="p-4 border text-sm text-gray-600">${sanaQiymati}</td>
+            <td class="p-4 border font-semibold text-slate-800">
+                <div class="flex items-center gap-4">
+                    <img src="${rasmUrl}" alt="${nomi}" class="w-16 h-12 object-cover rounded-xl border border-gray-100 shadow-sm group-hover:scale-105 transition-transform" onerror="this.src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=200'">
+                    <span class="uppercase text-sm tracking-wide group-hover:text-amber-600 transition-colors">${nomi}</span>
+                </div>
+            </td>
+            <td class="p-4 border text-orange-600 font-black text-sm">${narxi}</td>
+            <td class="p-4 border">
+                <span class="px-3 py-1.5 rounded-full text-xs font-bold ${statusColor} shadow-sm">${joriyStatus}</span>
+            </td>
+        </tr>
+    `;
+});
+            })
+            .catch(err => {
+                console.error("Xatolik yuz berdi:", err);
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500">Ma'lumot olishda xato yuz berdi.</td></tr>`;
+            });
+    }
+
+
+    // Modal oynani ochish funksiyasi
+function openMebelModal(encodedData) {
+    // JSON qilingan ma'lumotni qayta obyektga aylantiramiz
+    const mebel = JSON.parse(encodedData.replace(/&quot;/g, '"'));
+    
+    // Elementlarga ma'lumotlarni joylashtiramiz
+    document.getElementById('modalMebelRasm').src = mebel.rasmUrl;
+    document.getElementById('modalMebelNomi').innerText = mebel.nomi;
+    document.getElementById('modalMebelNarxi').innerText = mebel.narxi;
+    document.getElementById('modalMebelSanasi').innerText = mebel.sanaQiymati;
+    document.getElementById('modalMebelIzohi').innerText = mebel.izoh;
+
+    // Animatsiya bilan ko'rsatish
+    const modal = document.getElementById('mebelModal');
+    const card = document.getElementById('modalCard');
+    
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+        modal.style.opacity = '1';
+        card.style.transform = 'scale(1)';
+    }, 10);
+    
+    document.body.style.overflow = 'hidden'; // Orqa fon skroll bo'lmasligi uchun
+}
+
+// Modal oynani yopish funksiyasi
+function closeMebelModal() {
+    const modal = document.getElementById('mebelModal');
+    const card = document.getElementById('modalCard');
+    
+    modal.style.opacity = '0';
+    card.style.transform = 'scale(0.95)';
+    
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }, 300);
+}
+</script>
 </body>
 </html>
